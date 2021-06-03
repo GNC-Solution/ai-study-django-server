@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<h1>AI 학습몰입도</h1>
+<div>
+    <a href="/">
+    <button style="margin-right:20px;">HOME</button></a>
+    <a href="/userlog">
+    <button style="margin-right:20px;">MyLOG</button></a>
+</div>
+<div style="margin:50px 0;">
+    {% if request.user.is_authenticated %}
+        {{ user.get_username }} 님 환영합니다.<br>
+
+    {% else %}
+        <form action="/sologincheck" method="post"  enctype="multipart/form-data">
+        <input type="text" name="username" /><br>
+        <input type="password" name="userpwd" /><br>
+        <input type="submit" value="로그인" />
+        </form>
+    {% endif %}
+
+</div>
+</body>
+</html>

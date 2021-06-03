@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<h1>AI 학습몰입도 - {{ user.get_username }} 기록</h1>
+<div>
+    <a href="/">
+    <button style="margin-right:20px;">HOME</button></a>
+    <a href="/userlog">
+    <button style="margin-right:20px;">MyLOG</button></a>
+</div>
+<div style="margin:50px 0;">
+    {% if rsLog %}
+
+        {% for i in rsLog %}
+            <div style="padding:5px 0;margin: 5px 0;border-top:solid 1px #888;">
+                <span style="margin-right:30px;">{{i.username}}</span>
+                <span style="margin-right:30px;">{{i.roomno}}</span>
+                <span style="margin-right:30px;">{{i.logtime|date:'Y-m-d H:i:s'}}</span>
+                <span style="margin-right:30px;">{{i.existflag}}</span>
+            </div>
+        {% endfor %}
+
+    {% else %}
+        <p>Log 없습니다.</p>
+    {% endif %}
+
+</div>
+</body>
+</html>
