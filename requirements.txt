@@ -2,3 +2,5 @@ graphene_django
 graphene_file_upload
 validate_email
 bitcoin
+django-cors-headers
+
