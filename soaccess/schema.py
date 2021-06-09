@@ -162,9 +162,9 @@ class WriteStudy(graphene.Mutation):
 
                 if action == 'start':
                     existflag = 'Y'
-                if action == 'stop':
+                elif action == 'stop':
                     existflag = 'N'
-                if action == 'empty':
+                elif action == 'empty':
                     existflag = 'N'
                 else:
                     existflag = 'N'
