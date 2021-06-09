@@ -10,4 +10,8 @@
 
 2단계 : 학습목표 설정 (각종 시험), 목표일자까지 일정관리, 기간별 학습 몰입도 측정
 
+Architecture : MLOps
+- App + 기계학습/딥러닝 (Tensorflow.js)
+- webRTC
+- Python app
 
