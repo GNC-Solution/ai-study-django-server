@@ -13,5 +13,5 @@
 Architecture : MLOps
 - App + 기계학습/딥러닝 (Tensorflow.js)
 - webRTC
-- Python app
+- Python web / MariaDB
 
