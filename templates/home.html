@@ -23,7 +23,23 @@
         <input type="submit" value="로그인" />
         </form>
     {% endif %}
-
 </div>
+<div style="margin:10px 0;">
+    {% if rsRoom %}
+
+        {% for i in rsRoom %}
+            <div style="padding:5px 0;margin: 5px 0;border-top:solid 1px #888;">
+                <span style="margin-right:30px;">{{i.roomno}}</span>
+                <span style="margin-right:30px;">{{i.room_title}}</span>
+                <span style="margin-right:30px;">{{i.username}}</span>
+                <span style="margin-right:30px;">{{i.createdat}}</span>
+            </div>
+        {% endfor %}
+
+    {% else %}
+        <p>Room 없습니다.</p>
+    {% endif %}
+</div>
+
 </body>
 </html>

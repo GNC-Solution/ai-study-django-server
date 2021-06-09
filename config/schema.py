@@ -1,6 +1,6 @@
 import graphene
 
-from soaccess.schema import SOUserQuery, WriteLog
+from soaccess.schema import SOUserQuery, WriteLog, WriteStudy, CreateRoom
 
 
 class Query(SOUserQuery,
@@ -11,6 +11,8 @@ class Query(SOUserQuery,
 class Mutations(graphene.ObjectType):
 
     write_log = WriteLog.Field()
+    write_study = WriteStudy.Field()
+    create_room = CreateRoom.Field()
 
     pass
 

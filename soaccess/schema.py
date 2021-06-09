@@ -16,7 +16,7 @@ from django.db.models import Count, Sum, Q
 from django.conf import settings
 
 from souser.models import profile
-from soaccess.models import SOStudyuser
+from soaccess.models import SOStudyuser, SORoom
 
 from validate_email import validate_email
 
@@ -130,6 +130,91 @@ class WriteLog(graphene.Mutation):
                                                   existflag=existflag,
                                                   logtime=datetime.now()
                                                   )
+
+        else:
+            message = "사용자 없음..."
+            success = False
+
+        response_info["success"] = success
+        response_info["message"] = message
+
+        return response_info
+
+
+class WriteStudy(graphene.Mutation):
+    Output = Response
+
+    class Arguments:
+        roomno = graphene.String()
+        action = graphene.String()
+
+    def mutate(self, info, roomno, action):
+        response_info = {}
+        message = "로그 기록..."
+        success = True
+
+        userid = info.context.user.id
+        print(userid)
+        if userid:
+            username = info.context.user.username
+
+            if SORoom.objects.filter(roomno=roomno).exists():
+
+                if action == 'start':
+                    existflag = 'Y'
+                if action == 'stop':
+                    existflag = 'N'
+                if action == 'empty':
+                    existflag = 'N'
+                else:
+                    existflag = 'N'
+
+                studylog = SOStudyuser.objects.create(roomno=roomno,
+                                                      username=username,
+                                                      action=action,
+                                                      existflag=existflag,
+                                                      logtime=datetime.now()
+                                                      )
+
+            else:
+                message = "방이 없습니다."
+                success = False
+
+        else:
+            message = "로그인 안되어 있습니다."
+            success = False
+
+        response_info["success"] = success
+        response_info["message"] = message
+
+        return response_info
+
+
+class CreateRoom(graphene.Mutation):
+    Output = Response
+
+    class Arguments:
+        roomno = graphene.String()
+        roomtitle = graphene.String()
+
+    def mutate(self, info, roomno, roomtitle):
+        response_info = {}
+        message = "방 생성..."
+        success = True
+
+        userid = info.context.user.id
+        print(userid)
+
+        if userid:
+            username = info.context.user.username
+
+            soroom = SORoom.objects.create(roomno=roomno,
+                                           room_title=roomtitle,
+                                           username=username,
+                                           active_flag='1',
+                                           member_cnt=0,
+                                           createdat=datetime.now()
+                                           )
 
         else:
             message = "사용자 없음..."

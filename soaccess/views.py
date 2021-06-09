@@ -18,7 +18,6 @@ def userlog(request):
         username = request.user.username
 
         rsLog = SOStudyuser.objects.filter(username=username).order_by('-logtime')[:100]
-        print(len(rsLog))
         context["rsLog"] = rsLog
 
     return render(request, "userlog.html", context)

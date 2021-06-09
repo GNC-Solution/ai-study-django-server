@@ -5,9 +5,15 @@ from django.contrib.auth.models import User
 from django.contrib.auth import authenticate, login, logout
 from django.views.decorators.csrf import csrf_exempt
 
-def home(request):
+from soaccess.models import SOStudyuser, SORoom
 
-    return render(request, "home.html")
+def home(request):
+    context = {}
+
+    rsRoom = SORoom.objects.filter(active_flag='1')
+    context['rsRoom'] = rsRoom
+
+    return render(request, "home.html", context)
 
 
 @csrf_exempt
