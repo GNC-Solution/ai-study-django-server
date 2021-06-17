@@ -26,15 +26,26 @@
 </div>
 <div style="margin:10px 0;">
     {% if rsRoom %}
-
+        <table width="100%" border="1" cellspacing="0" cellpadding="0">
+            <tr style="height:35px;background-color:#e8e8e8;">
+                <th>Room ID</th>
+                <th>제목</th>
+                <th>생성자</th>
+                <th>일시</th>
+                <th>Client번호</th>
+                <th></th>
+            </tr>
         {% for i in rsRoom %}
-            <div style="padding:5px 0;margin: 5px 0;border-top:solid 1px #888;">
-                <span style="margin-right:30px;">{{i.roomno}}</span>
-                <span style="margin-right:30px;">{{i.room_title}}</span>
-                <span style="margin-right:30px;">{{i.username}}</span>
-                <span style="margin-right:30px;">{{i.createdat}}</span>
-            </div>
+            <tr style="height:35px;">
+                <td style="width:8%;text-align:center;">{{i.id}}</td>
+                <td style="width:15%;">{{i.room_title}}</td>
+                <td style="width:15%;text-align:center;">{{i.username}}</td>
+                <td style="width:15%;text-align:center;">{{i.createdat|date:"Y-m-d H-m"}}</td>
+                <td style="width:15%;text-align:center;">{{i.roomno}}</td>
+                <td style="width:32%;"></td>
+            </tr>
         {% endfor %}
+        </table>
 
     {% else %}
         <p>Room 없습니다.</p>

@@ -23,6 +23,9 @@ class profile(models.Model):
     qrcode_img = models.ImageField(default="qr_user.png", null=True, blank=True, upload_to='static/qrcode')
     qrcode_url = models.CharField(db_column='qrcode_url', null=True, max_length=1024, default='')
     usage_flag = models.CharField(max_length=10, default='1')
+    logaction = models.CharField(max_length=20, default='')
+    logstatus = models.CharField(max_length=10, default='0')
+    logtime = models.DateTimeField(db_column='logtime', )
 
 
 @receiver(post_save, sender=User)

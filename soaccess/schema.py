@@ -15,8 +15,10 @@ from django.db.models import Count, Sum, Q
 
 from django.conf import settings
 
+import pymysql
+
 from souser.models import profile
-from soaccess.models import SOStudyuser, SORoom
+from soaccess.models import SOStudylog, SORoom, SOUserDaily
 
 from validate_email import validate_email
 
@@ -31,6 +33,12 @@ import threading
 import qrcode
 
 import bitcoin.main as btc
+
+MYDB = getattr(settings, "DATABASES", None)
+MYDB_NAME = MYDB["default"]["NAME"]
+MYDB_USER = MYDB["default"]["USER"]
+MYDB_PWD = MYDB["default"]["PASSWORD"]
+MYDB_HOST = MYDB["default"]["HOST"]
 
 class EmailThread(threading.Thread):
 
@@ -55,6 +63,16 @@ class ProfileType(DjangoObjectType):
         model = profile
         fields = "__all__"
 
+class RoomType(DjangoObjectType):
+    class Meta:
+        model = SORoom
+        fields = "__all__"
+
+class DailyType(DjangoObjectType):
+    class Meta:
+        model = SOUserDaily
+        fields = "__all__"
+
 class Response(graphene.ObjectType):
     success = graphene.Boolean(required=True)
     message = graphene.String()
@@ -69,8 +87,25 @@ class ProfileResponse(graphene.ObjectType):
     message = graphene.String()
     user = graphene.Field(ProfileType)
 
+class RoomResponse(graphene.ObjectType):
+    success = graphene.Boolean(required=True)
+    message = graphene.String()
+    room = graphene.Field(RoomType)
+
+class RoomsResponse(graphene.ObjectType):
+    success = graphene.Boolean(required=True)
+    message = graphene.String(required=True)
+    rooms = graphene.List(RoomType)
+
+class DailyResponse(graphene.ObjectType):
+    success = graphene.Boolean(required=True)
+    message = graphene.String(required=True)
+    daily = graphene.List(DailyType)
+
 class SOUserQuery(graphene.ObjectType):
     user_check = graphene.Field(UserResponse, username=graphene.String(required=True), userpwd=graphene.String(required=True))
+    room_list = graphene.Field(RoomsResponse)
+    daily_list = graphene.Field(DailyResponse)
 
     def resolve_user_check(self, info, username, userpwd):
 
@@ -111,44 +146,92 @@ class SOUserQuery(graphene.ObjectType):
         return user_response
 
 
-class WriteLog(graphene.Mutation):
-    Output = Response
+    def resolve_room_list(self, info):
 
-    class Arguments:
-        roomno = graphene.String()
-        username = graphene.String()
-        existflag = graphene.String()
+        userid = info.context.user.id
 
-    def mutate(self, info, roomno, username, existflag):
         response_info = {}
-        message = "로그 기록..."
         success = True
+        message = "채팅방 읽기"
+        rooms = None
 
-        if User.objects.filter(username=username).exists():
-            studylog = SOStudyuser.objects.create(roomno=roomno,
-                                                  username=username,
-                                                  existflag=existflag,
-                                                  logtime=datetime.now()
-                                                  )
+        try:
+            rooms = SORoom.objects.filter(delete_flag='0')
+            print(len(rooms))
 
-        else:
-            message = "사용자 없음..."
+        except Exception as identifier:
             success = False
+            message = '채팅방 읽기 오류입니다.'
 
         response_info["success"] = success
         response_info["message"] = message
+        response_info["rooms"] = rooms
 
         return response_info
+
+
+    def resolve_daily_list(self, info):
+
+        userid = info.context.user.id
+        username = info.context.user.username
+
+        response_info = {}
+        success = True
+        message = "일별 학습도 읽기"
+        daily = None
+
+        try:
+            daily = SOUserDaily.objects.filter(username=username)
+
+        except Exception as identifier:
+            success = False
+            message = '일별 학습도 읽기 오류입니다.'
+
+        response_info["success"] = success
+        response_info["message"] = message
+        response_info["daily"] = daily
+
+        return response_info
+
+
+# class WriteLog(graphene.Mutation):
+#     Output = Response
+#
+#     class Arguments:
+#         roomno = graphene.String()
+#         username = graphene.String()
+#         existflag = graphene.String()
+#
+#     def mutate(self, info, roomno, username, existflag):
+#         response_info = {}
+#         message = "로그 기록..."
+#         success = True
+#
+#         if User.objects.filter(username=username).exists():
+#             studylog = SOStudylog.objects.create(roomno=roomno,
+#                                                   username=username,
+#                                                   existflag=existflag,
+#                                                   logtime=datetime.now()
+#                                                   )
+#
+#         else:
+#             message = "사용자 없음..."
+#             success = False
+#
+#         response_info["success"] = success
+#         response_info["message"] = message
+#
+#         return response_info
 
 
 class WriteStudy(graphene.Mutation):
     Output = Response
 
     class Arguments:
-        roomno = graphene.String()
+        roomid = graphene.String()
         action = graphene.String()
 
-    def mutate(self, info, roomno, action):
+    def mutate(self, info, roomid, action):
         response_info = {}
         message = "로그 기록..."
         success = True
@@ -157,8 +240,9 @@ class WriteStudy(graphene.Mutation):
         print(userid)
         if userid:
             username = info.context.user.username
+            userid = info.context.user.id
 
-            if SORoom.objects.filter(roomno=roomno).exists():
+            if SORoom.objects.filter(id=roomid).exists():
 
                 if action == 'start':
                     existflag = 'Y'
@@ -169,12 +253,33 @@ class WriteStudy(graphene.Mutation):
                 else:
                     existflag = 'N'
 
-                studylog = SOStudyuser.objects.create(roomno=roomno,
+                studylog = SOStudylog.objects.create(roomid=roomid,
                                                       username=username,
                                                       action=action,
                                                       existflag=existflag,
                                                       logtime=datetime.now()
                                                       )
+
+                # Table 있는지 읽어본다
+                strsql = f"CALL p_souserdaily_calculate ('{userid}','{action}') "
+                # print(strsql)
+
+                dbCon = pymysql.connect(host=MYDB_HOST,
+                                        user=MYDB_USER,
+                                        password=MYDB_PWD,
+                                        database=MYDB_NAME,
+                                        charset='utf8'
+                                        )
+
+                cursor = dbCon.cursor()
+                cursor.execute(strsql)
+                results = cursor.fetchone()
+                cursor.close()
+
+                userprofile = profile.objects.get(user_id=userid)
+                userprofile.logtime = datetime.now()
+                userprofile.logaction = action
+                userprofile.save()
 
             else:
                 message = "방이 없습니다."
@@ -191,13 +296,12 @@ class WriteStudy(graphene.Mutation):
 
 
 class CreateRoom(graphene.Mutation):
-    Output = Response
+    Output = RoomResponse
 
     class Arguments:
-        roomno = graphene.String()
         roomtitle = graphene.String()
 
-    def mutate(self, info, roomno, roomtitle):
+    def mutate(self, info, roomtitle):
         response_info = {}
         message = "방 생성..."
         success = True
@@ -205,22 +309,23 @@ class CreateRoom(graphene.Mutation):
         userid = info.context.user.id
         print(userid)
 
+        soroom = None
         if userid:
             username = info.context.user.username
 
-            soroom = SORoom.objects.create(roomno=roomno,
+            soroom = SORoom.objects.create(roomno='',
                                            room_title=roomtitle,
                                            username=username,
                                            active_flag='1',
                                            member_cnt=0,
                                            createdat=datetime.now()
                                            )
-
         else:
             message = "사용자 없음..."
             success = False
 
         response_info["success"] = success
         response_info["message"] = message
+        response_info["room"] = soroom
 
         return response_info

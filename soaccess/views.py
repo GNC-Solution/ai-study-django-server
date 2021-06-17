@@ -5,7 +5,7 @@ from django.contrib.auth.models import User
 from django.contrib.auth import authenticate, login, logout
 from django.views.decorators.csrf import csrf_exempt
 
-from .models import SOStudyuser
+from .models import SOStudylog
 
 def userlog(request):
     context = {}
@@ -17,7 +17,7 @@ def userlog(request):
         print('Log read...')
         username = request.user.username
 
-        rsLog = SOStudyuser.objects.filter(username=username).order_by('-logtime')[:100]
+        rsLog = SOStudylog.objects.filter(username=username).order_by('-logtime')[:100]
         context["rsLog"] = rsLog
 
     return render(request, "userlog.html", context)

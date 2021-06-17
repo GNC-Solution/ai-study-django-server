@@ -5,7 +5,7 @@ from django.contrib.auth.models import User
 from django.contrib.auth import authenticate, login, logout
 from django.views.decorators.csrf import csrf_exempt
 
-from soaccess.models import SOStudyuser, SORoom
+from soaccess.models import SOStudylog, SORoom
 
 def home(request):
     context = {}
