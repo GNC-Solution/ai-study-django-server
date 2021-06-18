@@ -1,14 +1,15 @@
 from django.db import models
 from django.contrib.auth.models import User
 
+from datetime import datetime
 
 class SOStudylog(models.Model):
-    roomid = models.IntegerField(db_column='roomid', max_length=255)
+    roomid = models.IntegerField(db_column='roomid', default=0)
     roomno = models.CharField(db_column='roomno', max_length=255)
     username = models.CharField(db_column='username', max_length=255)
     existflag = models.CharField(db_column='existflag', max_length=10)
     action = models.CharField(db_column='action', max_length=20)
-    logtime = models.DateTimeField(db_column='logtime', )
+    logtime = models.DateTimeField(db_column='logtime', default=datetime.now())
 
     class Meta:
         managed = False

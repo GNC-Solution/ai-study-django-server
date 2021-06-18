@@ -3,6 +3,8 @@ from django.contrib.auth.models import User
 from django.db.models.signals import post_save
 from django.dispatch import receiver
 
+from datetime import datetime
+
 active_roles = (
     ("manager", "manager"),
     ("partner", "partner"),
@@ -23,9 +25,9 @@ class profile(models.Model):
     qrcode_img = models.ImageField(default="qr_user.png", null=True, blank=True, upload_to='static/qrcode')
     qrcode_url = models.CharField(db_column='qrcode_url', null=True, max_length=1024, default='')
     usage_flag = models.CharField(max_length=10, default='1')
-    logaction = models.CharField(max_length=20, default='')
-    logstatus = models.CharField(max_length=10, default='0')
-    logtime = models.DateTimeField(db_column='logtime', )
+    logaction = models.CharField(max_length=20, null=True, default='')
+    logstatus = models.CharField(max_length=10, null=True, default='0')
+    logtime = models.DateTimeField(db_column='logtime', null=True, default=datetime.now())
 
 
 @receiver(post_save, sender=User)

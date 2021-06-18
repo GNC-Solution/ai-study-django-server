@@ -262,7 +262,7 @@ class WriteStudy(graphene.Mutation):
 
                 # Table 있는지 읽어본다
                 strsql = f"CALL p_souserdaily_calculate ('{userid}','{action}') "
-                # print(strsql)
+                print(strsql)
 
                 dbCon = pymysql.connect(host=MYDB_HOST,
                                         user=MYDB_USER,
