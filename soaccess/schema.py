@@ -105,7 +105,7 @@ class DailyResponse(graphene.ObjectType):
 class SOUserQuery(graphene.ObjectType):
     user_check = graphene.Field(UserResponse, username=graphene.String(required=True), userpwd=graphene.String(required=True))
     room_list = graphene.Field(RoomsResponse)
-    daily_list = graphene.Field(DailyResponse)
+    daily_list = graphene.Field(DailyResponse, username=graphene.String(required=True))
 
     def resolve_user_check(self, info, username, userpwd):
 
@@ -170,22 +170,28 @@ class SOUserQuery(graphene.ObjectType):
         return response_info
 
 
-    def resolve_daily_list(self, info):
+    def resolve_daily_list(self, info, username):
 
-        userid = info.context.user.id
-        username = info.context.user.username
+        if User.objects.filter(username=username).exists():
+            rsuser = User.objects.get(username=username)
+            userid = rsuser.id
 
-        response_info = {}
-        success = True
-        message = "일별 학습도 읽기"
-        daily = None
+            response_info = {}
+            success = True
+            message = "일별 학습도 읽기"
+            daily = None
 
-        try:
-            daily = SOUserDaily.objects.filter(username=username)
+            try:
+                daily = SOUserDaily.objects.filter(username=username)
 
-        except Exception as identifier:
+            except Exception as identifier:
+                success = False
+                message = '일별 학습도 읽기 오류입니다.'
+
+        else:
+            message = "사용자가 없습니다."
             success = False
-            message = '일별 학습도 읽기 오류입니다.'
+            daily = None
 
         response_info["success"] = success
         response_info["message"] = message
@@ -228,19 +234,18 @@ class WriteStudy(graphene.Mutation):
     Output = Response
 
     class Arguments:
+        username = graphene.String()
         roomid = graphene.String()
         action = graphene.String()
 
-    def mutate(self, info, roomid, action):
+    def mutate(self, info, username, roomid, action):
         response_info = {}
         message = "로그 기록..."
         success = True
 
-        userid = info.context.user.id
-        print(userid)
-        if userid:
-            username = info.context.user.username
-            userid = info.context.user.id
+        if User.objects.filter(username=username).exists():
+            rsuser = User.objects.get(username=username)
+            userid = rsuser.id
 
             if SORoom.objects.filter(id=roomid).exists():
 
@@ -286,7 +291,7 @@ class WriteStudy(graphene.Mutation):
                 success = False
 
         else:
-            message = "로그인 안되어 있습니다."
+            message = "사용자가 없습니다."
             success = False
 
         response_info["success"] = success
