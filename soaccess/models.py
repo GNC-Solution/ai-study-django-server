@@ -7,9 +7,11 @@ from datetime import datetime
 class SOUserchat(models.Model):
     user_id = models.IntegerField(db_column='user_id', default=0)
     username = models.CharField(db_column='username', max_length=255)
+    yyyymmdd = models.CharField(db_column='yyyymmdd', max_length=255)
     logaction = models.CharField(max_length=20, null=True, default='')
     logstatus = models.CharField(max_length=10, null=True, default='0')
-    logtime = models.DateTimeField(db_column='logtime', null=True, default=datetime.now())
+    userlogtime = models.DateTimeField(db_column='userlogtime', null=True, default=datetime.now())
+    starttime = models.DateTimeField(db_column='starttime', null=True)
 
     class Meta:
         managed = False

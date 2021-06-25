@@ -18,7 +18,7 @@ from django.conf import settings
 import pymysql
 
 from souser.models import profile
-from soaccess.models import SOStudylog, SORoom, SOUserDaily
+from soaccess.models import SOStudylog, SORoom, SOUserDaily, SOUserchat
 
 from validate_email import validate_email
 
@@ -265,10 +265,6 @@ class WriteStudy(graphene.Mutation):
                                                       logtime=datetime.now()
                                                       )
 
-                # Table 있는지 읽어본다
-                strsql = f"CALL p_souserdaily_calculate ('{userid}','{action}') "
-                print(strsql)
-
                 dbCon = pymysql.connect(host=MYDB_HOST,
                                         user=MYDB_USER,
                                         password=MYDB_PWD,
@@ -276,10 +272,22 @@ class WriteStudy(graphene.Mutation):
                                         charset='utf8'
                                         )
 
+                if action == 'start':
+                    print('start...')
+                    nowtime = datetime.now()
+                    yyyymmdd = nowtime.strftime("%Y%m%d")
+                    rsChat = SOUserchat.objects.get(user_id=userid)
+                    rsChat.yyyymmdd = yyyymmdd
+                    rsChat.save()
+
                 cursor = dbCon.cursor()
+                strsql = f"CALL p_souserdaily_calculate ('{userid}','{action}') "
+                
                 cursor.execute(strsql)
                 results = cursor.fetchone()
+                print(results)
                 cursor.close()
+                dbCon.close()
 
                 userprofile = profile.objects.get(user_id=userid)
                 userprofile.logtime = datetime.now()

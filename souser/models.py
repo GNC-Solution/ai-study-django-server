@@ -27,7 +27,6 @@ class profile(models.Model):
     usage_flag = models.CharField(max_length=10, default='1')
     logaction = models.CharField(max_length=20, null=True, default='')
     logstatus = models.CharField(max_length=10, null=True, default='0')
-    logtime = models.DateTimeField(db_column='logtime', null=True, default=datetime.now())
 
 
 @receiver(post_save, sender=User)
