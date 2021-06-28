@@ -313,7 +313,7 @@ class WriteStudy(graphene.Mutation):
                     p_studytime = 0
                     p_pausetime = 0
                     p_status = '1'
-                elif action == 'end':
+                elif action == 'stop':
                     p_studytime = totalsec / 60
                     p_pausetime = 0
                     p_status = '0'
