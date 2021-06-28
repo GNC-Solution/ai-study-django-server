@@ -27,7 +27,7 @@ from validate_email import validate_email
 import json
 import os
 import random
-from datetime import datetime
+from datetime import datetime, timezone
 
 import threading
 import qrcode
@@ -258,6 +258,9 @@ class WriteStudy(graphene.Mutation):
                 else:
                     existflag = 'N'
 
+                nowtime = datetime.now(timezone.utc)
+                yyyymmdd = nowtime.strftime("%Y%m%d")
+
                 studylog = SOStudylog.objects.create(roomid=roomid,
                                                       username=username,
                                                       action=action,
@@ -265,34 +268,100 @@ class WriteStudy(graphene.Mutation):
                                                       logtime=datetime.now()
                                                       )
 
-                dbCon = pymysql.connect(host=MYDB_HOST,
-                                        user=MYDB_USER,
-                                        password=MYDB_PWD,
-                                        database=MYDB_NAME,
-                                        charset='utf8'
-                                        )
+                if SOUserchat.objects.filter(user_id=userid).exists():
+                    rsChat = SOUserchat.objects.get(user_id=userid)
+                else:
+                    rsChat = SOUserchat.objects.create(user_id=userid,
+                                                       username=username,
+                                                       yyyymmdd=yyyymmdd,
+                                                       logaction=action,
+                                                       logstatus='0',
+                                                       userlogtime=nowtime,
+                                                       starttime=nowtime
+                                                       )
+
+                userlogtime = rsChat.userlogtime
+                logstatus = rsChat.logstatus
 
                 if action == 'start':
-                    print('start...')
-                    nowtime = datetime.now()
-                    yyyymmdd = nowtime.strftime("%Y%m%d")
-                    rsChat = SOUserchat.objects.get(user_id=userid)
+                    print('start... create yyyymmdd')
                     rsChat.yyyymmdd = yyyymmdd
-                    rsChat.save()
 
-                cursor = dbCon.cursor()
-                strsql = f"CALL p_souserdaily_calculate ('{userid}','{action}') "
-                
-                cursor.execute(strsql)
-                results = cursor.fetchone()
-                print(results)
-                cursor.close()
-                dbCon.close()
+                else:
+                    yyyymmdd = rsChat.yyyymmdd
 
-                userprofile = profile.objects.get(user_id=userid)
-                userprofile.logtime = datetime.now()
-                userprofile.logaction = action
-                userprofile.save()
+
+                if SOUserDaily.objects.filter(user_id=userid, yyyymmdd=yyyymmdd).exists():
+                    rsDaily = SOUserDaily.objects.get(user_id=userid, yyyymmdd=yyyymmdd)
+                else:
+                    rsDaily = SOUserDaily.objects.create(user_id=userid,
+                                                         username=username,
+                                                         yyyymmdd=yyyymmdd,
+                                                         total_study=0,
+                                                         total_pause=0,
+                                                         phone_cnt=0,
+                                                         pause_cnt=0
+                                                         )
+
+                totaltime = nowtime - userlogtime
+                totalsec = totaltime.total_seconds()
+
+                p_studytime = 0
+                p_pausetime = 0
+                p_status = '0'
+                if action == 'start':
+                    p_studytime = 0
+                    p_pausetime = 0
+                    p_status = '1'
+                elif action == 'end':
+                    p_studytime = totalsec / 60
+                    p_pausetime = 0
+                    p_status = '0'
+                elif action == 'pause':
+                    p_studytime = totalsec / 60
+                    p_pausetime = 0
+                    p_status = '1'
+                elif action == 'resume':
+                    p_studytime = 0
+                    p_pausetime = totalsec / 60
+                    p_status = '0'
+                else:
+                    action = 'invalid'
+
+                print(p_studytime)
+                print(p_pausetime)
+
+                rsDaily.total_study = rsDaily.total_study + p_studytime
+                rsDaily.total_pause = rsDaily.total_pause + p_pausetime
+                rsDaily.save()
+
+                rsChat.userlogtime = nowtime
+                rsChat.logaction = action
+                rsChat.logstatus = logstatus
+                rsChat.save()
+
+                # dbCon = pymysql.connect(host=MYDB_HOST,
+                #                         user=MYDB_USER,
+                #                         password=MYDB_PWD,
+                #                         database=MYDB_NAME,
+                #                         charset='utf8'
+                #                         )
+
+                # cursor = dbCon.cursor()
+                # strsql = f"call p_souserdaily_calculate ('{userid}','{action}') "
+                #
+                # cursor.execute(strsql)
+                # results = cursor.fetchone()
+                # print(results)
+                # cursor.close()
+                # dbCon.close()
+
+                # userprofile = profile.objects.get(user_id=userid)
+                # userprofile.logtime = datetime.now()
+                # userprofile.logaction = action
+                # userprofile.save()
+
+
 
             else:
                 message = "방이 없습니다."
