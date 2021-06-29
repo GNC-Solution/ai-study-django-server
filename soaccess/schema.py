@@ -332,10 +332,11 @@ class WriteStudy(graphene.Mutation):
 
                 print(p_studytime)
                 print(p_pausetime)
+                print(p_pausecnt)
 
                 rsDaily.total_study = rsDaily.total_study + p_studytime
                 rsDaily.total_pause = rsDaily.total_pause + p_pausetime
-                rsDaily.total_pause = rsDaily.pause_cnt + p_pausecnt
+                rsDaily.pause_cnt = rsDaily.pause_cnt + p_pausecnt
                 rsDaily.save()
 
                 rsChat.userlogtime = nowtime
