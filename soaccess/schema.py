@@ -306,6 +306,9 @@ class WriteStudy(graphene.Mutation):
                 totaltime = nowtime - userlogtime
                 totalsec = totaltime.total_seconds()
 
+                if totalsec < 0:
+                    totalsec = 0
+
                 p_studytime = 0
                 p_pausetime = 0
                 p_pausecnt = 0
