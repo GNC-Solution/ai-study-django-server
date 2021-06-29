@@ -308,22 +308,24 @@ class WriteStudy(graphene.Mutation):
 
                 p_studytime = 0
                 p_pausetime = 0
+                p_pausecnt = 0
                 p_status = '0'
                 if action == 'start':
                     p_studytime = 0
                     p_pausetime = 0
                     p_status = '1'
                 elif action == 'stop':
-                    p_studytime = totalsec / 60
+                    p_studytime = totalsec
                     p_pausetime = 0
                     p_status = '0'
                 elif action == 'pause':
-                    p_studytime = totalsec / 60
+                    p_studytime = totalsec
                     p_pausetime = 0
+                    p_pausecnt = 1
                     p_status = '1'
                 elif action == 'resume':
                     p_studytime = 0
-                    p_pausetime = totalsec / 60
+                    p_pausetime = totalsec
                     p_status = '0'
                 else:
                     action = 'invalid'
@@ -333,6 +335,7 @@ class WriteStudy(graphene.Mutation):
 
                 rsDaily.total_study = rsDaily.total_study + p_studytime
                 rsDaily.total_pause = rsDaily.total_pause + p_pausetime
+                rsDaily.total_pause = rsDaily.pause_cnt + p_pausecnt
                 rsDaily.save()
 
                 rsChat.userlogtime = nowtime
@@ -348,24 +351,70 @@ class WriteStudy(graphene.Mutation):
                 #                         )
 
                 # cursor = dbCon.cursor()
-                # strsql = f"call p_souserdaily_calculate ('{userid}','{action}') "
-                #
+                # strsql = f"CALL p_souserdaily_calculate ('{userid}','{action}') "
+
+                # ==> 이부분이 안되고
                 # cursor.execute(strsql)
                 # results = cursor.fetchone()
+
+                # ==> 이렇게 해야 할듯
+                # csr.execute(strsql)
+                
                 # print(results)
                 # cursor.close()
                 # dbCon.close()
-
+                                
                 # userprofile = profile.objects.get(user_id=userid)
                 # userprofile.logtime = datetime.now()
                 # userprofile.logaction = action
                 # userprofile.save()
 
-
-
             else:
                 message = "방이 없습니다."
                 success = False
+
+        else:
+            message = "사용자가 없습니다."
+            success = False
+
+        response_info["success"] = success
+        response_info["message"] = message
+
+        return response_info
+
+
+class UsePhone(graphene.Mutation):
+    Output = Response
+
+    class Arguments:
+        username = graphene.String()
+
+    def mutate(self, info, username):
+        response_info = {}
+        message = "폰사용 기록..."
+        success = True
+
+        if User.objects.filter(username=username).exists():
+            rsuser = User.objects.get(username=username)
+            userid = rsuser.id
+
+            nowtime = datetime.now(timezone.utc)
+            yyyymmdd = nowtime.strftime("%Y%m%d")
+
+            if SOUserDaily.objects.filter(user_id=userid, yyyymmdd=yyyymmdd).exists():
+                rsDaily = SOUserDaily.objects.get(user_id=userid, yyyymmdd=yyyymmdd)
+            else:
+                rsDaily = SOUserDaily.objects.create(user_id=userid,
+                                                     username=username,
+                                                     yyyymmdd=yyyymmdd,
+                                                     total_study=0,
+                                                     total_pause=0,
+                                                     phone_cnt=0,
+                                                     pause_cnt=0
+                                                     )
+
+            rsDaily.phone_cnt = rsDaily.phone_cnt + 1
+            rsDaily.save()
 
         else:
             message = "사용자가 없습니다."
