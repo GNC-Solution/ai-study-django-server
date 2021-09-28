@@ -15,3 +15,26 @@ Architecture : MLOps
 - webRTC
 - Python web / MariaDB
 
+
+----------------------------
+
+# 실행 방법1
+1. python 가상환경 설치
+2. pip install mysqlclient 설치
+3. requirements.txt 설치
+    - pip install -r requirements.txt
+4. python manage.py runserver
+
+
+# 실행 방법2
+1. python 가상환경 설치
+2. mysqlclient wheel 파일 설치
+    - https://www.lfd.uci.edu/~gohlke/pythonlibs/#mysqlclient
+    - pip install [생성된 .whl파일]
+4. pip install mysqlclient 설치
+5. requirements.txt 설치
+    - pip install -r requirements.txt
+
+6. python manage.py runserver
+
+
