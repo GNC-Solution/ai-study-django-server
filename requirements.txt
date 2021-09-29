@@ -3,4 +3,6 @@ graphene_file_upload
 validate_email
 bitcoin
 django-cors-headers
-
+Pillow-8.3.2
+qrcode-7.3
+pymysql-1.0.2
