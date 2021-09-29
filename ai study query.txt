@@ -1,0 +1,789 @@
+-- --------------------------------------------------------
+-- 호스트:                          223.194.46.212
+-- 서버 버전:                        10.4.6-MariaDB - mariadb.org binary distribution
+-- 서버 OS:                        Win64
+-- HeidiSQL 버전:                  11.3.0.6295
+-- --------------------------------------------------------
+
+/*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
+/*!40101 SET NAMES utf8 */;
+/*!50503 SET NAMES utf8mb4 */;
+/*!40014 SET @OLD_FOREIGN_KEY_CHECKS=@@FOREIGN_KEY_CHECKS, FOREIGN_KEY_CHECKS=0 */;
+/*!40101 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='NO_AUTO_VALUE_ON_ZERO' */;
+/*!40111 SET @OLD_SQL_NOTES=@@SQL_NOTES, SQL_NOTES=0 */;
+
+
+-- aistudydb 데이터베이스 구조 내보내기
+CREATE DATABASE IF NOT EXISTS `aistudydb` /*!40100 DEFAULT CHARACTER SET utf8 */;
+USE `aistudydb`;
+
+-- 테이블 aistudydb.auth_group 구조 내보내기
+CREATE TABLE IF NOT EXISTS `auth_group` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `name` varchar(150) NOT NULL,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `name` (`name`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+-- 테이블 데이터 aistudydb.auth_group:~0 rows (대략적) 내보내기
+DELETE FROM `auth_group`;
+/*!40000 ALTER TABLE `auth_group` DISABLE KEYS */;
+/*!40000 ALTER TABLE `auth_group` ENABLE KEYS */;
+
+-- 테이블 aistudydb.auth_group_permissions 구조 내보내기
+CREATE TABLE IF NOT EXISTS `auth_group_permissions` (
+  `id` bigint(20) NOT NULL AUTO_INCREMENT,
+  `group_id` int(11) NOT NULL,
+  `permission_id` int(11) NOT NULL,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `auth_group_permissions_group_id_permission_id_0cd325b0_uniq` (`group_id`,`permission_id`),
+  KEY `auth_group_permissio_permission_id_84c5c92e_fk_auth_perm` (`permission_id`),
+  CONSTRAINT `auth_group_permissio_permission_id_84c5c92e_fk_auth_perm` FOREIGN KEY (`permission_id`) REFERENCES `auth_permission` (`id`),
+  CONSTRAINT `auth_group_permissions_group_id_b120cbf9_fk_auth_group_id` FOREIGN KEY (`group_id`) REFERENCES `auth_group` (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+-- 테이블 데이터 aistudydb.auth_group_permissions:~0 rows (대략적) 내보내기
+DELETE FROM `auth_group_permissions`;
+/*!40000 ALTER TABLE `auth_group_permissions` DISABLE KEYS */;
+/*!40000 ALTER TABLE `auth_group_permissions` ENABLE KEYS */;
+
+-- 테이블 aistudydb.auth_permission 구조 내보내기
+CREATE TABLE IF NOT EXISTS `auth_permission` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `name` varchar(255) NOT NULL,
+  `content_type_id` int(11) NOT NULL,
+  `codename` varchar(100) NOT NULL,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `auth_permission_content_type_id_codename_01ab375a_uniq` (`content_type_id`,`codename`),
+  CONSTRAINT `auth_permission_content_type_id_2f476e4b_fk_django_co` FOREIGN KEY (`content_type_id`) REFERENCES `django_content_type` (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=41 DEFAULT CHARSET=utf8;
+
+-- 테이블 데이터 aistudydb.auth_permission:~40 rows (대략적) 내보내기
+DELETE FROM `auth_permission`;
+/*!40000 ALTER TABLE `auth_permission` DISABLE KEYS */;
+INSERT INTO `auth_permission` (`id`, `name`, `content_type_id`, `codename`) VALUES
+	(1, 'Can add log entry', 1, 'add_logentry'),
+	(2, 'Can change log entry', 1, 'change_logentry'),
+	(3, 'Can delete log entry', 1, 'delete_logentry'),
+	(4, 'Can view log entry', 1, 'view_logentry'),
+	(5, 'Can add permission', 2, 'add_permission'),
+	(6, 'Can change permission', 2, 'change_permission'),
+	(7, 'Can delete permission', 2, 'delete_permission'),
+	(8, 'Can view permission', 2, 'view_permission'),
+	(9, 'Can add group', 3, 'add_group'),
+	(10, 'Can change group', 3, 'change_group'),
+	(11, 'Can delete group', 3, 'delete_group'),
+	(12, 'Can view group', 3, 'view_group'),
+	(13, 'Can add user', 4, 'add_user'),
+	(14, 'Can change user', 4, 'change_user'),
+	(15, 'Can delete user', 4, 'delete_user'),
+	(16, 'Can view user', 4, 'view_user'),
+	(17, 'Can add content type', 5, 'add_contenttype'),
+	(18, 'Can change content type', 5, 'change_contenttype'),
+	(19, 'Can delete content type', 5, 'delete_contenttype'),
+	(20, 'Can view content type', 5, 'view_contenttype'),
+	(21, 'Can add session', 6, 'add_session'),
+	(22, 'Can change session', 6, 'change_session'),
+	(23, 'Can delete session', 6, 'delete_session'),
+	(24, 'Can view session', 6, 'view_session'),
+	(25, 'Can add profile', 7, 'add_profile'),
+	(26, 'Can change profile', 7, 'change_profile'),
+	(27, 'Can delete profile', 7, 'delete_profile'),
+	(28, 'Can view profile', 7, 'view_profile'),
+	(29, 'Can add so room', 8, 'add_soroom'),
+	(30, 'Can change so room', 8, 'change_soroom'),
+	(31, 'Can delete so room', 8, 'delete_soroom'),
+	(32, 'Can view so room', 8, 'view_soroom'),
+	(33, 'Can add so studylog', 9, 'add_sostudylog'),
+	(34, 'Can change so studylog', 9, 'change_sostudylog'),
+	(35, 'Can delete so studylog', 9, 'delete_sostudylog'),
+	(36, 'Can view so studylog', 9, 'view_sostudylog'),
+	(37, 'Can add so user daily', 10, 'add_souserdaily'),
+	(38, 'Can change so user daily', 10, 'change_souserdaily'),
+	(39, 'Can delete so user daily', 10, 'delete_souserdaily'),
+	(40, 'Can view so user daily', 10, 'view_souserdaily');
+/*!40000 ALTER TABLE `auth_permission` ENABLE KEYS */;
+
+-- 테이블 aistudydb.auth_user 구조 내보내기
+CREATE TABLE IF NOT EXISTS `auth_user` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `password` varchar(128) NOT NULL,
+  `last_login` datetime(6) DEFAULT NULL,
+  `is_superuser` tinyint(1) NOT NULL,
+  `username` varchar(150) NOT NULL,
+  `first_name` varchar(150) NOT NULL,
+  `last_name` varchar(150) NOT NULL,
+  `email` varchar(254) NOT NULL,
+  `is_staff` tinyint(1) NOT NULL,
+  `is_active` tinyint(1) NOT NULL,
+  `date_joined` datetime(6) NOT NULL,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `username` (`username`)
+) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8;
+
+-- 테이블 데이터 aistudydb.auth_user:~4 rows (대략적) 내보내기
+DELETE FROM `auth_user`;
+/*!40000 ALTER TABLE `auth_user` DISABLE KEYS */;
+INSERT INTO `auth_user` (`id`, `password`, `last_login`, `is_superuser`, `username`, `first_name`, `last_name`, `email`, `is_staff`, `is_active`, `date_joined`) VALUES
+	(1, 'pbkdf2_sha256$260000$9Z4mYYOJpbuJW3OvDe7dV6$sLBOY95M0HOSsXG+SAVBguCUaHGDdhlX7yZnn7uTcz0=', '2021-09-28 01:45:16.314020', 1, 'studyuser', '', '', '', 1, 1, '2021-06-18 07:11:30.608698'),
+	(2, 'pbkdf2_sha256$260000$eye6mM72QlMTWfnFYDYaKp$Mw8yFqOKYO+UIAm+29RTwaYKvBMgL0r50JuymXfSdI0=', NULL, 1, 'studyuser2', '', '', '', 1, 1, '2021-06-18 07:11:48.830817'),
+	(3, 'pbkdf2_sha256$260000$u4GExAhXnx7f73J5ajL3Gq$T6WWQpvlzU7P5D5cxC59mQngmV5/cMGJenE8i4PJSgQ=', NULL, 1, 'studyuser3', '', '', '', 1, 1, '2021-06-18 07:12:03.389063'),
+	(4, 'pbkdf2_sha256$260000$qVaV1ek4bDRB0i99xRO9s0$ax3aN0jp5mSAxcvKhs0zMqUfma/f2ng8D9O+tTxpytg=', NULL, 1, 'studyuser4', '', '', '', 1, 1, '2021-06-18 07:12:21.062423'),
+	(5, 'pbkdf2_sha256$260000$6HqIh6OwUKPhplNyn2avIM$DZgh0pUbgDVxzr0UFHVHolPqqjgZWuWh/f0+XxIbeaw=', NULL, 1, 'studyuser5', '', '', '', 1, 1, '2021-06-18 07:12:35.988670');
+/*!40000 ALTER TABLE `auth_user` ENABLE KEYS */;
+
+-- 테이블 aistudydb.auth_user_groups 구조 내보내기
+CREATE TABLE IF NOT EXISTS `auth_user_groups` (
+  `id` bigint(20) NOT NULL AUTO_INCREMENT,
+  `user_id` int(11) NOT NULL,
+  `group_id` int(11) NOT NULL,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `auth_user_groups_user_id_group_id_94350c0c_uniq` (`user_id`,`group_id`),
+  KEY `auth_user_groups_group_id_97559544_fk_auth_group_id` (`group_id`),
+  CONSTRAINT `auth_user_groups_group_id_97559544_fk_auth_group_id` FOREIGN KEY (`group_id`) REFERENCES `auth_group` (`id`),
+  CONSTRAINT `auth_user_groups_user_id_6a12ed8b_fk_auth_user_id` FOREIGN KEY (`user_id`) REFERENCES `auth_user` (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+-- 테이블 데이터 aistudydb.auth_user_groups:~0 rows (대략적) 내보내기
+DELETE FROM `auth_user_groups`;
+/*!40000 ALTER TABLE `auth_user_groups` DISABLE KEYS */;
+/*!40000 ALTER TABLE `auth_user_groups` ENABLE KEYS */;
+
+-- 테이블 aistudydb.auth_user_user_permissions 구조 내보내기
+CREATE TABLE IF NOT EXISTS `auth_user_user_permissions` (
+  `id` bigint(20) NOT NULL AUTO_INCREMENT,
+  `user_id` int(11) NOT NULL,
+  `permission_id` int(11) NOT NULL,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `auth_user_user_permissions_user_id_permission_id_14a6b632_uniq` (`user_id`,`permission_id`),
+  KEY `auth_user_user_permi_permission_id_1fbb5f2c_fk_auth_perm` (`permission_id`),
+  CONSTRAINT `auth_user_user_permi_permission_id_1fbb5f2c_fk_auth_perm` FOREIGN KEY (`permission_id`) REFERENCES `auth_permission` (`id`),
+  CONSTRAINT `auth_user_user_permissions_user_id_a95ead1b_fk_auth_user_id` FOREIGN KEY (`user_id`) REFERENCES `auth_user` (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+-- 테이블 데이터 aistudydb.auth_user_user_permissions:~0 rows (대략적) 내보내기
+DELETE FROM `auth_user_user_permissions`;
+/*!40000 ALTER TABLE `auth_user_user_permissions` DISABLE KEYS */;
+/*!40000 ALTER TABLE `auth_user_user_permissions` ENABLE KEYS */;
+
+-- 테이블 aistudydb.django_admin_log 구조 내보내기
+CREATE TABLE IF NOT EXISTS `django_admin_log` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `action_time` datetime(6) NOT NULL,
+  `object_id` longtext DEFAULT NULL,
+  `object_repr` varchar(200) NOT NULL,
+  `action_flag` smallint(5) unsigned NOT NULL CHECK (`action_flag` >= 0),
+  `change_message` longtext NOT NULL,
+  `content_type_id` int(11) DEFAULT NULL,
+  `user_id` int(11) NOT NULL,
+  PRIMARY KEY (`id`),
+  KEY `django_admin_log_content_type_id_c4bce8eb_fk_django_co` (`content_type_id`),
+  KEY `django_admin_log_user_id_c564eba6_fk_auth_user_id` (`user_id`),
+  CONSTRAINT `django_admin_log_content_type_id_c4bce8eb_fk_django_co` FOREIGN KEY (`content_type_id`) REFERENCES `django_content_type` (`id`),
+  CONSTRAINT `django_admin_log_user_id_c564eba6_fk_auth_user_id` FOREIGN KEY (`user_id`) REFERENCES `auth_user` (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+-- 테이블 데이터 aistudydb.django_admin_log:~0 rows (대략적) 내보내기
+DELETE FROM `django_admin_log`;
+/*!40000 ALTER TABLE `django_admin_log` DISABLE KEYS */;
+/*!40000 ALTER TABLE `django_admin_log` ENABLE KEYS */;
+
+-- 테이블 aistudydb.django_content_type 구조 내보내기
+CREATE TABLE IF NOT EXISTS `django_content_type` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `app_label` varchar(100) NOT NULL,
+  `model` varchar(100) NOT NULL,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `django_content_type_app_label_model_76bd3d3b_uniq` (`app_label`,`model`)
+) ENGINE=InnoDB AUTO_INCREMENT=11 DEFAULT CHARSET=utf8;
+
+-- 테이블 데이터 aistudydb.django_content_type:~10 rows (대략적) 내보내기
+DELETE FROM `django_content_type`;
+/*!40000 ALTER TABLE `django_content_type` DISABLE KEYS */;
+INSERT INTO `django_content_type` (`id`, `app_label`, `model`) VALUES
+	(1, 'admin', 'logentry'),
+	(3, 'auth', 'group'),
+	(2, 'auth', 'permission'),
+	(4, 'auth', 'user'),
+	(5, 'contenttypes', 'contenttype'),
+	(6, 'sessions', 'session'),
+	(8, 'soaccess', 'soroom'),
+	(9, 'soaccess', 'sostudylog'),
+	(10, 'soaccess', 'souserdaily'),
+	(7, 'souser', 'profile');
+/*!40000 ALTER TABLE `django_content_type` ENABLE KEYS */;
+
+-- 테이블 aistudydb.django_migrations 구조 내보내기
+CREATE TABLE IF NOT EXISTS `django_migrations` (
+  `id` bigint(20) NOT NULL AUTO_INCREMENT,
+  `app` varchar(255) NOT NULL,
+  `name` varchar(255) NOT NULL,
+  `applied` datetime(6) NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=23 DEFAULT CHARSET=utf8;
+
+-- 테이블 데이터 aistudydb.django_migrations:~22 rows (대략적) 내보내기
+DELETE FROM `django_migrations`;
+/*!40000 ALTER TABLE `django_migrations` DISABLE KEYS */;
+INSERT INTO `django_migrations` (`id`, `app`, `name`, `applied`) VALUES
+	(1, 'contenttypes', '0001_initial', '2021-06-18 07:10:31.862072'),
+	(2, 'auth', '0001_initial', '2021-06-18 07:10:37.712769'),
+	(3, 'admin', '0001_initial', '2021-06-18 07:10:39.344622'),
+	(4, 'admin', '0002_logentry_remove_auto_add', '2021-06-18 07:10:39.398895'),
+	(5, 'admin', '0003_logentry_add_action_flag_choices', '2021-06-18 07:10:39.485284'),
+	(6, 'contenttypes', '0002_remove_content_type_name', '2021-06-18 07:10:40.003551'),
+	(7, 'auth', '0002_alter_permission_name_max_length', '2021-06-18 07:10:40.590066'),
+	(8, 'auth', '0003_alter_user_email_max_length', '2021-06-18 07:10:41.191221'),
+	(9, 'auth', '0004_alter_user_username_opts', '2021-06-18 07:10:41.241220'),
+	(10, 'auth', '0005_alter_user_last_login_null', '2021-06-18 07:10:41.659434'),
+	(11, 'auth', '0006_require_contenttypes_0002', '2021-06-18 07:10:41.695116'),
+	(12, 'auth', '0007_alter_validators_add_error_messages', '2021-06-18 07:10:41.734390'),
+	(13, 'auth', '0008_alter_user_username_max_length', '2021-06-18 07:10:41.866103'),
+	(14, 'auth', '0009_alter_user_last_name_max_length', '2021-06-18 07:10:41.981298'),
+	(15, 'auth', '0010_alter_group_name_max_length', '2021-06-18 07:10:42.562904'),
+	(16, 'auth', '0011_update_proxy_permissions', '2021-06-18 07:10:42.614393'),
+	(17, 'auth', '0012_alter_user_first_name_max_length', '2021-06-18 07:10:42.729979'),
+	(18, 'sessions', '0001_initial', '2021-06-18 07:10:43.101338'),
+	(19, 'soaccess', '0001_initial', '2021-06-18 07:10:43.137647'),
+	(20, 'souser', '0001_initial', '2021-06-18 07:10:44.074052'),
+	(21, 'souser', '0002_alter_profile_role', '2021-06-18 07:10:44.136120'),
+	(22, 'souser', '0003_auto_20210618_1610', '2021-06-18 07:10:45.124929');
+/*!40000 ALTER TABLE `django_migrations` ENABLE KEYS */;
+
+-- 테이블 aistudydb.django_session 구조 내보내기
+CREATE TABLE IF NOT EXISTS `django_session` (
+  `session_key` varchar(40) NOT NULL,
+  `session_data` longtext NOT NULL,
+  `expire_date` datetime(6) NOT NULL,
+  PRIMARY KEY (`session_key`),
+  KEY `django_session_expire_date_a5c62663` (`expire_date`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+-- 테이블 데이터 aistudydb.django_session:~20 rows (대략적) 내보내기
+DELETE FROM `django_session`;
+/*!40000 ALTER TABLE `django_session` DISABLE KEYS */;
+INSERT INTO `django_session` (`session_key`, `session_data`, `expire_date`) VALUES
+	('20xhwmveisbe9qnt4fly1hqmxnr51zxh', '.eJxVjDsOwjAQRO_iGln-Yi0lPWew1rs2DiBbipMKcXcSKQWUM-_NvEXEdalxHXmOE4uL0OL02yWkZ2474Ae2e5fU2zJPSe6KPOiQt875dT3cv4OKo27rYCGDM6g9cbAqA2gCR0AlOHTBEgZdPIE5Z8DkTAFL7BVvIVmlgvh8AdqKN98:1ly2cc:WB-r_whwuclM2k_x3Z6SePqunCb_RtNbl-t1qc1gwFk', '2021-07-13 01:33:06.085414'),
+	('36kt35onhvj8cv9vwk2e6yiphnqnl8fp', '.eJxVjDsOwjAQRO_iGln-Yi0lPWew1rs2DiBbipMKcXcSKQWUM-_NvEXEdalxHXmOE4uL0OL02yWkZ2474Ae2e5fU2zJPSe6KPOiQt875dT3cv4OKo27rYCGDM6g9cbAqA2gCR0AlOHTBEgZdPIE5Z8DkTAFL7BVvIVmlgvh8AdqKN98:1lvZBp:nD-hzJdTqpiL4ngV_PX-BBQvpYrZ-2ZBU-S2buwxpCA', '2021-07-06 05:43:13.871743'),
+	('40oga7f9wlg790d1q7fiohq1vm5m0ose', '.eJxVjDsOwjAQRO_iGln-Yi0lPWew1rs2DiBbipMKcXcSKQWUM-_NvEXEdalxHXmOE4uL0OL02yWkZ2474Ae2e5fU2zJPSe6KPOiQt875dT3cv4OKo27rYCGDM6g9cbAqA2gCR0AlOHTBEgZdPIE5Z8DkTAFL7BVvIVmlgvh8AdqKN98:1lxgOf:E7Y9Jr-kI9836VFVNI66LKa8sLWSBCtN6RRCk92APWE', '2021-07-12 01:49:13.489223'),
+	('55en0chgtbxiuc0zfef9vnp2bhtbkbcg', '.eJxVjDsOwjAQRO_iGln-Yi0lPWew1rs2DiBbipMKcXcSKQWUM-_NvEXEdalxHXmOE4uL0OL02yWkZ2474Ae2e5fU2zJPSe6KPOiQt875dT3cv4OKo27rYCGDM6g9cbAqA2gCR0AlOHTBEgZdPIE5Z8DkTAFL7BVvIVmlgvh8AdqKN98:1lvZtM:bdI2CKoZuw33dl77ZdGUtZPJiXz_q9DqZgd43bSOkEc', '2021-07-06 06:28:12.000448'),
+	('5b4sxjvk1a6qh13ogfbqkk36lolvnfm9', '.eJxVjDsOwjAQRO_iGln-Yi0lPWew1rs2DiBbipMKcXcSKQWUM-_NvEXEdalxHXmOE4uL0OL02yWkZ2474Ae2e5fU2zJPSe6KPOiQt875dT3cv4OKo27rYCGDM6g9cbAqA2gCR0AlOHTBEgZdPIE5Z8DkTAFL7BVvIVmlgvh8AdqKN98:1luaid:yOLs8u6KxIl7ivHoCOwf18BqG3wOqe8MPoATAnKQ-cM', '2021-07-03 13:09:03.335050'),
+	('88qtnmvnnmkaue3bu4o3kepm48h5saho', '.eJxVjDsOwjAQRO_iGln-Yi0lPWew1rs2DiBbipMKcXcSKQWUM-_NvEXEdalxHXmOE4uL0OL02yWkZ2474Ae2e5fU2zJPSe6KPOiQt875dT3cv4OKo27rYCGDM6g9cbAqA2gCR0AlOHTBEgZdPIE5Z8DkTAFL7BVvIVmlgvh8AdqKN98:1lvZsU:GTkeSn4XKwJxoABjKjlaFI0-45mGXk_cHDHF5eCog-4', '2021-07-06 06:27:18.997645'),
+	('8fb9f9nmbst9gqihesrj9189ezxojrof', '.eJxVjDsOwjAQRO_iGln-Yi0lPWew1rs2DiBbipMKcXcSKQWUM-_NvEXEdalxHXmOE4uL0OL02yWkZ2474Ae2e5fU2zJPSe6KPOiQt875dT3cv4OKo27rYCGDM6g9cbAqA2gCR0AlOHTBEgZdPIE5Z8DkTAFL7BVvIVmlgvh8AdqKN98:1lvZsf:sW4LM7C8j2-j55b61yHCLHxbWjLloeON6J_CMxp2PSU', '2021-07-06 06:27:29.767405'),
+	('g2w0mno7pcytwancplqyepsskih1dvhn', '.eJxVjDsOwjAQRO_iGln-Yi0lPWew1rs2DiBbipMKcXcSKQWUM-_NvEXEdalxHXmOE4uL0OL02yWkZ2474Ae2e5fU2zJPSe6KPOiQt875dT3cv4OKo27rYCGDM6g9cbAqA2gCR0AlOHTBEgZdPIE5Z8DkTAFL7BVvIVmlgvh8AdqKN98:1lvZsT:Urn69UWHfgy9LC5PnvxtRKVmeJt_1_50KpQ-MstdYP8', '2021-07-06 06:27:17.297244'),
+	('i7z053izfu255xmedsecni8gom1rtloo', '.eJxVjDsOwjAQRO_iGln-Yi0lPWew1rs2DiBbipMKcXcSKQWUM-_NvEXEdalxHXmOE4uL0OL02yWkZ2474Ae2e5fU2zJPSe6KPOiQt875dT3cv4OKo27rYCGDM6g9cbAqA2gCR0AlOHTBEgZdPIE5Z8DkTAFL7BVvIVmlgvh8AdqKN98:1lvZsg:MAILqCQ2bxK2v80Mw1hYGy53CI0lpBaqcsFKV1BZRFQ', '2021-07-06 06:27:30.229174'),
+	('inkj2ojspil9lz5xv0p7vg7i7c7v6gpc', '.eJxVjDsOwjAQRO_iGln-Yi0lPWew1rs2DiBbipMKcXcSKQWUM-_NvEXEdalxHXmOE4uL0OL02yWkZ2474Ae2e5fU2zJPSe6KPOiQt875dT3cv4OKo27rYCGDM6g9cbAqA2gCR0AlOHTBEgZdPIE5Z8DkTAFL7BVvIVmlgvh8AdqKN98:1lvZsf:sW4LM7C8j2-j55b61yHCLHxbWjLloeON6J_CMxp2PSU', '2021-07-06 06:27:29.786281'),
+	('iql4xrb1xu0i1rczzii6vwvbs5jwtky0', '.eJxVjDsOwjAQRO_iGln-Yi0lPWew1rs2DiBbipMKcXcSKQWUM-_NvEXEdalxHXmOE4uL0OL02yWkZ2474Ae2e5fU2zJPSe6KPOiQt875dT3cv4OKo27rYCGDM6g9cbAqA2gCR0AlOHTBEgZdPIE5Z8DkTAFL7BVvIVmlgvh8AdqKN98:1lvZsh:g-RZavpNGMYAmyhfJqyxgVGaoLnw2Ilxu4pjaW5eSy8', '2021-07-06 06:27:31.011606'),
+	('p41600l1gu9oybvmaxko6hat54mzg3o2', '.eJxVjDsOwjAQRO_iGln-Yi0lPWew1rs2DiBbipMKcXcSKQWUM-_NvEXEdalxHXmOE4uL0OL02yWkZ2474Ae2e5fU2zJPSe6KPOiQt875dT3cv4OKo27rYCGDM6g9cbAqA2gCR0AlOHTBEgZdPIE5Z8DkTAFL7BVvIVmlgvh8AdqKN98:1lvVt6:ZyOutZN5YjrVpxUWkKYuXNTux1COW9RT6mmIJLj7O5A', '2021-07-06 02:11:40.260965'),
+	('pkz47p2zs6rg98qqpez9otmu3l3yvtjw', '.eJxVjDsOwjAQRO_iGln-Yi0lPWew1rs2DiBbipMKcXcSKQWUM-_NvEXEdalxHXmOE4uL0OL02yWkZ2474Ae2e5fU2zJPSe6KPOiQt875dT3cv4OKo27rYCGDM6g9cbAqA2gCR0AlOHTBEgZdPIE5Z8DkTAFL7BVvIVmlgvh8AdqKN98:1lvZsZ:UOlTjJyJe4l5wjGv_LYYUW75KPOkDxh5b2AN2MiMFFM', '2021-07-06 06:27:23.798896'),
+	('qjre9kbaf0u10b4yjgmy9mi1gyioo2k3', '.eJxVjDsOwjAQRO_iGln-Yi0lPWew1rs2DiBbipMKcXcSKQWUM-_NvEXEdalxHXmOE4uL0OL02yWkZ2474Ae2e5fU2zJPSe6KPOiQt875dT3cv4OKo27rYCGDM6g9cbAqA2gCR0AlOHTBEgZdPIE5Z8DkTAFL7BVvIVmlgvh8AdqKN98:1lvZse:cbmP8gsDTi7s_pv9ExJNfsYcZtruzChdH2tR0Hiw_6s', '2021-07-06 06:27:28.890555'),
+	('sw6anufpadsms89slex1ysy4fwsg0f4e', '.eJxVjDsOwjAQRO_iGln-Yi0lPWew1rs2DiBbipMKcXcSKQWUM-_NvEXEdalxHXmOE4uL0OL02yWkZ2474Ae2e5fU2zJPSe6KPOiQt875dT3cv4OKo27rYCGDM6g9cbAqA2gCR0AlOHTBEgZdPIE5Z8DkTAFL7BVvIVmlgvh8AdqKN98:1lu9w9:A-nn1IFxChLijVE37jG4kvuc-N-kBiyjXKdGue0oF54', '2021-07-02 08:33:13.972572'),
+	('tovrhcrkpe35g7exwlxm4we97zfsvy8c', '.eJxVjDsOwjAQRO_iGln-Yi0lPWew1rs2DiBbipMKcXcSKQWUM-_NvEXEdalxHXmOE4uL0OL02yWkZ2474Ae2e5fU2zJPSe6KPOiQt875dT3cv4OKo27rYCGDM6g9cbAqA2gCR0AlOHTBEgZdPIE5Z8DkTAFL7BVvIVmlgvh8AdqKN98:1ly84Z:biEWn-PbviIu18HO5N0qVWBRWNlj2032hP8J8FxYt6Y', '2021-07-13 07:22:19.980634'),
+	('wbdb7j14fnrj3pdoi74hemosflinx6m8', '.eJxVjDsOwjAQRO_iGln-Yi0lPWew1rs2DiBbipMKcXcSKQWUM-_NvEXEdalxHXmOE4uL0OL02yWkZ2474Ae2e5fU2zJPSe6KPOiQt875dT3cv4OKo27rYCGDM6g9cbAqA2gCR0AlOHTBEgZdPIE5Z8DkTAFL7BVvIVmlgvh8AdqKN98:1lu8o0:pjaIkeofNOVgCOXpS5xvpp6AUoOlH9dtndkwE-xkJ9s', '2021-07-02 07:20:44.558000'),
+	('wd10xno5fvjzccxz6nlaqllqt9t0atd6', '.eJxVjDsOwjAQRO_iGln-Yi0lPWew1rs2DiBbipMKcXcSKQWUM-_NvEXEdalxHXmOE4uL0OL02yWkZ2474Ae2e5fU2zJPSe6KPOiQt875dT3cv4OKo27rYCGDM6g9cbAqA2gCR0AlOHTBEgZdPIE5Z8DkTAFL7BVvIVmlgvh8AdqKN98:1lvXvX:q1qyFZ_MYY-LxfqN0zVpc5ZtCbXQL67uzWCnFmP84tQ', '2021-07-06 04:22:19.534621'),
+	('x41mniwcm8kx9hik7w2f7sy0ng4dwtrz', '.eJxVjDsOwjAQRO_iGln-Yi0lPWew1rs2DiBbipMKcXcSKQWUM-_NvEXEdalxHXmOE4uL0OL02yWkZ2474Ae2e5fU2zJPSe6KPOiQt875dT3cv4OKo27rYCGDM6g9cbAqA2gCR0AlOHTBEgZdPIE5Z8DkTAFL7BVvIVmlgvh8AdqKN98:1mV2BI:o6o1yTzsMtjOhAK9y0avtTES29T9n85UMpS5r1TMH-c', '2021-10-12 01:45:16.400943'),
+	('y43yu3lyv1o5tkn1580oxp9xmhzhjx37', '.eJxVjDsOwjAQRO_iGln-Yi0lPWew1rs2DiBbipMKcXcSKQWUM-_NvEXEdalxHXmOE4uL0OL02yWkZ2474Ae2e5fU2zJPSe6KPOiQt875dT3cv4OKo27rYCGDM6g9cbAqA2gCR0AlOHTBEgZdPIE5Z8DkTAFL7BVvIVmlgvh8AdqKN98:1lwfry:6Z_x6Amwqsd3BWith7QBXs9ba3WsRKmogq7O0I1yA3w', '2021-07-09 07:03:18.051604');
+/*!40000 ALTER TABLE `django_session` ENABLE KEYS */;
+
+-- 프로시저 aistudydb.p_souserdaily_calculate 구조 내보내기
+DELIMITER //
+CREATE PROCEDURE `p_souserdaily_calculate`(
+	IN `p_userid` INT,
+	IN `p_action` VARCHAR(20)
+)
+BEGIN
+
+	
+	DECLARE p_logtime DATETIME;
+	DECLARE p_logaction VARCHAR(20);	
+	DECLARE p_logstatus VARCHAR(10);	
+	DECLARE p_username VARCHAR(10);
+	DECLARE p_yyyymmdd VARCHAR(8);	
+	DECLARE p_myymd VARCHAR(8);	
+	DECLARE p_status VARCHAR(10);	
+	DECLARE p_myaction VARCHAR(20);	
+	
+	DECLARE p_count,
+	        p_studytime,
+	        p_pausetime,
+	        p_sec INT;
+
+	SELECT DATE_FORMAT(NOW(),'%Y%m%d')
+	  INTO p_yyyymmdd;
+	  
+   SELECT username
+     INTO p_username
+     FROM auth_user
+	 WHERE id = p_userid;	 
+	
+   SELECT COUNT(DISTINCT(username)) 
+     INTO p_count
+     FROM souserchat
+	 WHERE username = p_username;	 
+	 
+	IF p_count = 0 THEN
+	
+		INSERT INTO souserchat (
+		                        user_id,
+		                        username,
+		                        yyyymmdd,
+										userlogtime,
+										logaction,
+										logstatus
+										)
+							  VALUES (
+							         p_userid,
+							         p_username,
+							         p_yyyymmdd,
+							         NOW(),
+							         p_action,
+							         '1'
+							         );
+		 
+	END IF;
+	 
+
+	IF p_action = 'start' THEN	
+		
+		-- DATE_FORMAT(NOW(),'%Y%m%d')
+		
+	  UPDATE souserchat
+	     SET userlogtime = NOW(),
+	         yyyymmdd = p_yyyymmdd
+	   WHERE user_id = p_userid;	
+	   
+	  -- UPDATE souserchat
+	  --    SET yyyymmdd = p_yyyymmdd
+	  --  WHERE user_id = p_userid;	 
+	
+	END IF;
+	
+	SELECT userlogtime, logaction, logstatus, yyyymmdd
+	  INTO p_logtime, p_logaction, p_logstatus, p_myymd
+	  FROM souserchat
+	 WHERE user_id = p_userid;
+	  
+	SET p_myaction = p_action; 
+	
+   SELECT COUNT(DISTINCT(yyyymmdd)) 
+     INTO p_count
+     FROM souserdaily
+	 WHERE user_id = p_userid AND yyyymmdd = p_myymd;	 	 
+	 	
+	IF p_count = 0 THEN
+	
+		INSERT INTO souserdaily (
+		                        user_id,
+		                        username,
+				                  yyyymmdd,
+				                  total_study,
+				                  total_pause,
+				                  phone_cnt,
+				                  pause_cnt
+										)
+						     VALUES ( 
+						            p_userid,
+						            p_username,						            
+							         p_myymd,
+							         0,
+							         0,
+							         0,
+							         0
+						            );
+						            
+	
+	END IF;
+	
+   SELECT TIME_TO_SEC(TIMEDIFF(NOW(), p_logtime))
+     INTO p_sec;
+                   			
+	SET p_studytime = 0,
+	    p_pausetime = 0,
+       p_status = '0';
+	       
+	IF p_action = 'start' THEN				
+		SET p_studytime = 0;
+		SET p_pausetime = 0,
+	       p_status = '1';
+	       
+	ELSEIF p_action = 'end' THEN	
+		SET p_studytime = p_sec / 60;
+		SET p_pausetime = 0,
+	       p_status = '0';
+	       
+	ELSEIF p_action = 'pause' THEN	
+		SET p_studytime = p_sec / 60;
+		SET p_pausetime = 0,
+	       p_status = '1';
+	       
+	ELSEIF p_action = 'resume' THEN	
+		SET p_studytime = 0;
+		SET p_pausetime = p_sec / 60,
+	       p_status = '1';
+	       
+	ELSE
+		SET p_myaction = 'invalid';
+	       
+	END IF;
+	
+	
+	UPDATE souserdaily 
+	   SET total_study = total_study + p_studytime,
+	       total_pause = total_pause + p_pausetime
+	 WHERE user_id = p_userid 
+	   AND yyyymmdd = p_myymd;	
+
+	UPDATE souserchat
+	   SET userlogtime = NOW(),
+	       logaction = p_myaction,
+	       logstatus = p_status
+	 WHERE user_id = p_userid;	 
+	
+	
+	SELECT p_studytime AS studytime,
+	       p_pausetime AS pausetime,
+			 p_status AS userstatus,
+			 p_myaction AS action;
+
+
+END//
+DELIMITER ;
+
+-- 테이블 aistudydb.soroom 구조 내보내기
+CREATE TABLE IF NOT EXISTS `soroom` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `roomno` varchar(50) NOT NULL DEFAULT '',
+  `room_title` varchar(50) DEFAULT NULL,
+  `username` varchar(255) DEFAULT NULL,
+  `active_flag` varchar(10) DEFAULT '1',
+  `delete_flag` varchar(10) DEFAULT '0',
+  `member_cnt` int(11) DEFAULT NULL,
+  `createdat` datetime DEFAULT current_timestamp(),
+  `closedat` datetime DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=8 DEFAULT CHARSET=utf8;
+
+-- 테이블 데이터 aistudydb.soroom:~0 rows (대략적) 내보내기
+DELETE FROM `soroom`;
+/*!40000 ALTER TABLE `soroom` DISABLE KEYS */;
+INSERT INTO `soroom` (`id`, `roomno`, `room_title`, `username`, `active_flag`, `delete_flag`, `member_cnt`, `createdat`, `closedat`) VALUES
+	(7, '', '방입니다...', 'studyuser', '1', '', 0, '2021-06-18 16:27:55', NULL);
+/*!40000 ALTER TABLE `soroom` ENABLE KEYS */;
+
+-- 테이블 aistudydb.sosyudylog 구조 내보내기
+CREATE TABLE IF NOT EXISTS `sosyudylog` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `roomid` int(11) DEFAULT NULL,
+  `roomno` varchar(255) DEFAULT NULL,
+  `username` varchar(255) DEFAULT NULL,
+  `existflag` varchar(10) DEFAULT NULL,
+  `action` varchar(20) DEFAULT NULL,
+  `logtime` datetime DEFAULT current_timestamp(),
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=478 DEFAULT CHARSET=utf8;
+
+-- 테이블 데이터 aistudydb.sosyudylog:~197 rows (대략적) 내보내기
+DELETE FROM `sosyudylog`;
+/*!40000 ALTER TABLE `sosyudylog` DISABLE KEYS */;
+INSERT INTO `sosyudylog` (`id`, `roomid`, `roomno`, `username`, `existflag`, `action`, `logtime`) VALUES
+	(108, 7, '', 'studyuser', 'N', 'pause', '2021-06-18 16:28:05'),
+	(109, 7, '', 'studyuser', 'Y', 'start', '2021-06-18 16:28:16'),
+	(110, 7, '', 'studyuser', 'Y', 'start', '2021-06-18 16:46:45'),
+	(111, 7, '', 'studyuser', 'Y', 'start', '2021-06-18 16:55:30'),
+	(112, 7, '', 'studyuser', 'Y', 'start', '2021-06-19 22:11:20'),
+	(113, 7, '', 'studyuser', 'Y', 'start', '2021-06-19 22:12:00'),
+	(114, 7, '', 'studyuser', 'N', 'pause', '2021-06-19 22:13:51'),
+	(115, 7, '', 'studyuser', 'N', 'resume', '2021-06-19 22:16:39'),
+	(116, 7, '', 'studyuser', 'N', 'end', '2021-06-19 22:17:41'),
+	(117, 7, '', 'studyuser', 'Y', 'start', '2021-06-22 04:49:24'),
+	(118, 7, '', 'studyuser', 'N', 'end', '2021-06-22 16:13:18'),
+	(119, 7, '', 'studyuser', 'Y', 'start', '2021-06-23 04:35:16'),
+	(120, 7, '', 'studyuser', 'Y', 'start', '2021-06-23 05:06:31'),
+	(121, 7, '', 'studyuser', 'N', 'stop', '2021-06-23 05:06:56'),
+	(122, 7, '', 'studyuser', 'N', 'stop', '2021-06-23 05:06:57'),
+	(123, 7, '', 'studyuser', 'Y', 'start', '2021-06-23 05:07:05'),
+	(124, 7, '', 'studyuser', 'N', 'pause', '2021-06-23 05:07:20'),
+	(125, 7, '', 'studyuser', 'N', 'pause', '2021-06-23 05:07:20'),
+	(126, 7, '', 'studyuser', 'N', 'resume', '2021-06-23 05:07:32'),
+	(252, 7, '', 'studyuser', 'Y', 'start', '2021-06-25 06:56:38'),
+	(253, 7, '', 'studyuser', 'N', 'stop', '2021-06-25 06:56:59'),
+	(254, 7, '', 'studyuser', 'Y', 'start', '2021-06-25 06:58:42'),
+	(255, 7, '', 'studyuser', 'N', 'stop', '2021-06-25 06:59:28'),
+	(256, 7, '', 'studyuser', 'Y', 'start', '2021-06-25 16:03:43'),
+	(257, 7, '', 'studyuser', 'Y', 'start', '2021-06-25 16:04:08'),
+	(258, 7, '', 'studyuser', 'Y', 'start', '2021-06-25 16:05:48'),
+	(259, 7, '', 'studyuser', 'Y', 'start', '2021-06-25 16:06:56'),
+	(260, 7, '', 'studyuser', 'Y', 'start', '2021-06-25 16:07:39'),
+	(261, 7, '', 'studyuser', 'Y', 'start', '2021-06-25 16:08:42'),
+	(262, 7, '', 'studyuser', 'Y', 'start', '2021-06-26 07:05:10'),
+	(263, 7, '', 'studyuser', 'Y', 'start', '2021-06-26 07:06:16'),
+	(264, 7, '', 'studyuser', 'Y', 'start', '2021-06-26 07:09:34'),
+	(265, 7, '', 'studyuser', 'Y', 'start', '2021-06-26 07:16:53'),
+	(266, 7, '', 'studyuser', 'Y', 'start', '2021-06-26 07:17:15'),
+	(267, 7, '', 'studyuser', 'Y', 'start', '2021-06-26 07:17:56'),
+	(268, 7, '', 'studyuser', 'Y', 'start', '2021-06-26 07:18:48'),
+	(269, 7, '', 'studyuser', 'Y', 'start', '2021-06-26 07:18:49'),
+	(270, 7, '', 'studyuser', 'Y', 'start', '2021-06-26 07:21:04'),
+	(271, 7, '', 'studyuser', 'Y', 'start', '2021-06-26 07:24:33'),
+	(272, 7, '', 'studyuser', 'Y', 'start', '2021-06-26 07:25:22'),
+	(273, 7, '', 'studyuser', 'Y', 'start', '2021-06-26 07:27:08'),
+	(274, 7, '', 'studyuser', 'Y', 'start', '2021-06-26 07:27:19'),
+	(275, 7, '', 'studyuser', 'Y', 'start', '2021-06-26 07:29:49'),
+	(276, 7, '', 'studyuser', 'Y', 'start', '2021-06-26 07:30:56'),
+	(277, 7, '', 'studyuser', 'Y', 'start', '2021-06-26 07:34:47'),
+	(278, 7, '', 'studyuser', 'Y', 'start', '2021-06-26 07:36:20'),
+	(279, 7, '', 'studyuser', 'N', 'end', '2021-06-26 07:37:14'),
+	(280, 7, '', 'studyuser', 'Y', 'start', '2021-06-26 07:40:30'),
+	(281, 7, '', 'studyuser', 'Y', 'start', '2021-06-26 07:40:38'),
+	(282, 7, '', 'studyuser', 'Y', 'start', '2021-06-26 07:40:56'),
+	(283, 7, '', 'studyuser', 'Y', 'start', '2021-06-26 07:42:58'),
+	(284, 7, '', 'studyuser', 'Y', 'start', '2021-06-26 07:43:42'),
+	(285, 7, '', 'studyuser', 'Y', 'start', '2021-06-26 07:44:05'),
+	(286, 7, '', 'studyuser', 'Y', 'start', '2021-06-26 07:44:08'),
+	(287, 7, '', 'studyuser', 'Y', 'start', '2021-06-26 07:46:37'),
+	(288, 7, '', 'studyuser', 'Y', 'start', '2021-06-26 07:47:14'),
+	(289, 7, '', 'studyuser', 'Y', 'start', '2021-06-26 07:48:13'),
+	(290, 7, '', 'studyuser', 'Y', 'start', '2021-06-26 07:50:58'),
+	(291, 7, '', 'studyuser', 'Y', 'start', '2021-06-26 07:56:19'),
+	(292, 7, '', 'studyuser', 'Y', 'start', '2021-06-26 07:57:59'),
+	(293, 7, '', 'studyuser', 'Y', 'start', '2021-06-26 07:59:06'),
+	(294, 7, '', 'studyuser', 'N', 'end', '2021-06-26 08:00:57'),
+	(295, 7, '', 'studyuser', 'Y', 'start', '2021-06-26 08:01:11'),
+	(341, 7, '', 'studyuser', 'Y', 'start', '2021-06-29 07:51:04'),
+	(342, 7, '', 'studyuser', 'N', 'stop', '2021-06-28 07:52:34'),
+	(343, 7, '', 'studyuser', 'Y', 'start', '2021-06-29 01:12:50'),
+	(344, 7, '', 'studyuser', 'N', 'pause', '2021-06-29 01:13:37'),
+	(345, 7, '', 'studyuser', 'N', 'resume', '2021-06-29 01:13:41'),
+	(346, 7, '', 'studyuser', 'N', 'stop', '2021-06-29 01:14:23'),
+	(347, 7, '', 'studyuser', 'Y', 'start', '2021-06-29 01:15:41'),
+	(348, 7, '', 'studyuser', 'N', 'stop', '2021-06-29 01:17:24'),
+	(349, 7, '', 'studyuser', 'Y', 'start', '2021-06-29 01:17:39'),
+	(350, 7, '', 'studyuser', 'N', 'pause', '2021-06-29 01:20:21'),
+	(351, 7, '', 'studyuser', 'N', 'resume', '2021-06-29 01:20:38'),
+	(352, 7, '', 'studyuser', 'N', 'stop', '2021-06-29 01:22:26'),
+	(353, 7, '', 'studyuser', 'Y', 'start', '2021-06-29 01:23:18'),
+	(354, 7, '', 'studyuser', 'N', 'pause', '2021-06-29 01:30:18'),
+	(355, 7, '', 'studyuser', 'N', 'resume', '2021-06-29 01:33:37'),
+	(356, 7, '', 'studyuser', 'N', 'stop', '2021-06-29 01:36:04'),
+	(357, 7, '', 'studyuser', 'Y', 'start', '2021-06-29 01:47:02'),
+	(358, 7, '', 'studyuser', 'N', 'stop', '2021-06-29 01:47:26'),
+	(360, 7, '', 'studyuser', 'Y', 'start', '2021-06-29 07:16:58'),
+	(361, 7, '', 'studyuser', 'N', 'pause', '2021-06-29 07:17:41'),
+	(362, 7, '', 'studyuser', 'N', 'resume', '2021-06-29 07:20:39'),
+	(363, 7, '', 'studyuser', 'N', 'pause', '2021-06-29 07:20:48'),
+	(364, 7, '', 'studyuser', 'N', 'pause', '2021-06-29 16:22:59'),
+	(365, 7, '', 'studyuser', 'N', 'pause', '2021-06-29 16:23:34'),
+	(366, 7, '', 'studyuser', 'N', 'resume', '2021-06-29 07:25:16'),
+	(367, 7, '', 'studyuser', 'Y', 'start', '2021-06-29 07:25:36'),
+	(368, 7, '', 'studyuser', 'Y', 'start', '2021-06-29 07:31:28'),
+	(369, 7, '', 'studyuser', 'N', 'stop', '2021-06-29 07:32:03'),
+	(370, 7, '', 'studyuser', 'N', 'resume', '2021-06-29 07:32:03'),
+	(371, 7, '', 'studyuser', 'N', 'stop', '2021-06-29 07:32:04'),
+	(372, 7, '', 'studyuser', 'Y', 'start', '2021-06-29 07:32:59'),
+	(373, 7, '', 'studyuser', 'Y', 'start', '2021-06-29 07:50:19'),
+	(374, 7, '', 'studyuser', 'N', 'pause', '2021-06-29 07:51:00'),
+	(375, 7, '', 'studyuser', 'N', 'resume', '2021-06-29 07:59:30'),
+	(376, 7, '', 'studyuser', 'N', 'pause', '2021-06-29 07:59:42'),
+	(377, 7, '', 'studyuser', 'N', 'resume', '2021-06-29 07:59:47'),
+	(378, 7, '', 'studyuser', 'N', 'pause', '2021-06-29 08:00:26'),
+	(379, 7, '', 'studyuser', 'N', 'resume', '2021-06-29 17:05:34'),
+	(380, 7, '', 'studyuser', 'Y', 'start', '2021-06-29 08:08:17'),
+	(381, 7, '', 'studyuser', 'N', 'pause', '2021-06-29 08:08:35'),
+	(382, 7, '', 'studyuser', 'Y', 'start', '2021-06-29 17:11:14'),
+	(383, 7, '', 'studyuser', 'N', 'pause', '2021-06-29 17:11:37'),
+	(384, 7, '', 'studyuser', 'N', 'resume', '2021-06-29 17:12:00'),
+	(385, 7, '', 'studyuser', 'N', 'pause', '2021-06-29 17:12:18'),
+	(386, 7, '', 'studyuser', 'N', 'resume', '2021-06-29 17:12:35'),
+	(387, 7, '', 'studyuser', 'N', 'stop', '2021-06-29 17:12:44'),
+	(388, 7, '', 'studyuser', 'Y', 'start', '2021-06-29 08:16:41'),
+	(389, 7, '', 'studyuser', 'N', 'pause', '2021-06-29 08:16:52'),
+	(390, 7, '', 'studyuser', 'N', 'resume', '2021-06-29 08:18:22'),
+	(391, 7, '', 'studyuser', 'N', 'pause', '2021-06-29 08:18:36'),
+	(392, 7, '', 'studyuser', 'Y', 'start', '2021-06-29 08:21:50'),
+	(393, 7, '', 'studyuser', 'N', 'pause', '2021-06-29 08:21:52'),
+	(394, 7, '', 'studyuser', 'N', 'resume', '2021-06-29 08:21:53'),
+	(395, 7, '', 'studyuser', 'N', 'pause', '2021-06-29 08:21:53'),
+	(396, 7, '', 'studyuser', 'N', 'pause', '2021-06-29 09:35:13'),
+	(397, 7, '', 'studyuser', 'Y', 'start', '2021-06-29 09:35:28'),
+	(398, 7, '', 'studyuser', 'N', 'stop', '2021-06-29 09:35:48'),
+	(399, 7, '', 'studyuser', 'Y', 'start', '2021-06-29 09:36:04'),
+	(400, 7, '', 'studyuser', 'N', 'pause', '2021-06-29 09:36:11'),
+	(401, 7, '', 'studyuser', 'N', 'resume', '2021-06-29 09:36:21'),
+	(402, 7, '', 'studyuser', 'N', 'pause', '2021-06-29 09:36:28'),
+	(403, 7, '', 'studyuser', 'N', 'resume', '2021-06-29 09:36:34'),
+	(404, 7, '', 'studyuser', 'N', 'stop', '2021-06-29 09:36:47'),
+	(405, 7, '', 'studyuser', 'Y', 'start', '2021-06-29 09:36:54'),
+	(406, 7, '', 'studyuser', 'N', 'pause', '2021-06-29 09:37:05'),
+	(407, 7, '', 'studyuser', 'N', 'resume', '2021-06-29 09:37:11'),
+	(408, 7, '', 'studyuser', 'N', 'stop', '2021-06-29 09:37:16'),
+	(409, 7, '', 'studyuser', 'Y', 'start', '2021-06-29 09:48:47'),
+	(410, 7, '', 'studyuser', 'N', 'pause', '2021-06-29 09:48:50'),
+	(411, 7, '', 'studyuser', 'N', 'pause', '2021-06-30 01:10:45'),
+	(412, 7, '', 'studyuser', 'Y', 'start', '2021-06-30 01:10:52'),
+	(413, 7, '', 'studyuser', 'N', 'pause', '2021-06-30 01:10:56'),
+	(414, 7, '', 'studyuser', 'N', 'resume', '2021-06-30 01:11:25'),
+	(415, 7, '', 'studyuser', 'N', 'pause', '2021-06-30 01:11:48'),
+	(416, 7, '', 'studyuser', 'N', 'resume', '2021-06-30 01:11:51'),
+	(417, 7, '', 'studyuser', 'N', 'stop', '2021-06-30 01:12:43'),
+	(418, 7, '', 'studyuser', 'Y', 'start', '2021-06-30 01:25:22'),
+	(419, 7, '', 'studyuser', 'N', 'pause', '2021-06-30 01:26:26'),
+	(420, 7, '', 'studyuser', 'Y', 'start', '2021-07-21 04:35:25'),
+	(421, 7, '', 'studyuser', 'N', 'pause', '2021-07-21 04:35:32'),
+	(422, 7, '', 'studyuser', 'N', 'stop', '2021-07-21 04:36:08'),
+	(423, 7, '', 'studyuser', 'Y', 'start', '2021-07-22 04:54:22'),
+	(424, 7, '', 'studyuser', 'N', 'stop', '2021-07-22 04:54:25'),
+	(425, 7, '', 'studyuser', 'Y', 'start', '2021-07-22 04:54:36'),
+	(426, 7, '', 'studyuser', 'N', 'stop', '2021-07-22 04:54:39'),
+	(427, 7, '', 'studyuser', 'Y', 'start', '2021-07-22 04:57:31'),
+	(428, 7, '', 'studyuser', 'N', 'pause', '2021-07-22 04:58:19'),
+	(429, 7, '', 'studyuser', 'N', 'resume', '2021-07-22 04:58:25'),
+	(430, 7, '', 'studyuser', 'N', 'pause', '2021-07-22 04:58:42'),
+	(431, 7, '', 'studyuser', 'N', 'resume', '2021-07-22 04:58:47'),
+	(432, 7, '', 'studyuser', 'N', 'stop', '2021-07-22 04:58:51'),
+	(433, 7, '', 'studyuser', 'Y', 'start', '2021-07-22 04:59:33'),
+	(434, 7, '', 'studyuser', 'N', 'stop', '2021-07-22 04:59:48'),
+	(435, 7, '', 'studyuser', 'Y', 'start', '2021-07-22 05:03:49'),
+	(436, 7, '', 'studyuser', 'N', 'pause', '2021-07-22 05:03:53'),
+	(437, 7, '', 'studyuser', 'N', 'stop', '2021-07-22 05:03:56'),
+	(438, 7, '', 'studyuser', 'Y', 'start', '2021-07-23 04:13:25'),
+	(439, 7, '', 'studyuser', 'N', 'pause', '2021-07-23 04:13:36'),
+	(440, 7, '', 'studyuser', 'N', 'resume', '2021-07-23 04:13:39'),
+	(441, 7, '', 'studyuser', 'N', 'pause', '2021-07-23 04:13:40'),
+	(442, 7, '', 'studyuser', 'N', 'resume', '2021-07-23 04:13:42'),
+	(443, 7, '', 'studyuser', 'N', 'pause', '2021-07-23 04:13:44'),
+	(444, 7, '', 'studyuser', 'N', 'resume', '2021-07-23 04:13:45'),
+	(445, 7, '', 'studyuser', 'N', 'stop', '2021-07-23 04:13:46'),
+	(446, 7, '', 'studyuser', 'Y', 'start', '2021-07-23 04:25:24'),
+	(447, 7, '', 'studyuser', 'N', 'pause', '2021-07-23 04:26:11'),
+	(448, 7, '', 'studyuser', 'N', 'resume', '2021-07-23 04:27:24'),
+	(449, 7, '', 'studyuser', 'N', 'pause', '2021-07-23 04:27:29'),
+	(450, 7, '', 'studyuser', 'N', 'resume', '2021-07-23 04:28:34'),
+	(451, 7, '', 'studyuser', 'N', 'stop', '2021-07-23 04:28:56'),
+	(452, 7, '', 'studyuser', 'Y', 'start', '2021-07-23 04:31:26'),
+	(453, 7, '', 'studyuser', 'N', 'stop', '2021-07-23 04:32:06'),
+	(454, 7, '', 'studyuser', 'Y', 'start', '2021-07-23 04:37:12'),
+	(455, 7, '', 'studyuser', 'N', 'stop', '2021-07-23 04:37:23'),
+	(456, 7, '', 'studyuser', 'Y', 'start', '2021-07-23 04:45:49'),
+	(457, 7, '', 'studyuser', 'N', 'pause', '2021-07-23 04:46:10'),
+	(458, 7, '', 'studyuser', 'N', 'resume', '2021-07-23 04:46:14'),
+	(459, 7, '', 'studyuser', 'N', 'pause', '2021-07-23 04:46:31'),
+	(460, 7, '', 'studyuser', 'N', 'resume', '2021-07-23 04:46:35'),
+	(461, 7, '', 'studyuser', 'N', 'stop', '2021-07-23 04:46:41'),
+	(462, 7, '', 'studyuser', 'Y', 'start', '2021-07-23 04:46:46'),
+	(463, 7, '', 'studyuser', 'N', 'stop', '2021-07-23 04:46:54'),
+	(464, 7, '', 'studyuser', 'Y', 'start', '2021-07-31 05:41:35'),
+	(465, 7, '', 'studyuser', 'Y', 'start', '2021-07-31 05:43:33'),
+	(466, 7, '', 'studyuser', 'Y', 'start', '2021-07-31 05:52:15'),
+	(467, 7, '', 'studyuser', 'N', 'stop', '2021-07-31 05:52:18'),
+	(468, 7, '', 'studyuser', 'Y', 'start', '2021-07-31 06:07:37'),
+	(469, 7, '', 'studyuser', 'N', 'pause', '2021-07-31 06:07:47'),
+	(470, 7, '', 'studyuser', 'N', 'resume', '2021-07-31 06:07:53'),
+	(471, 7, '', 'studyuser', 'N', 'pause', '2021-07-31 06:07:54'),
+	(472, 7, '', 'studyuser', 'N', 'resume', '2021-07-31 06:07:56'),
+	(473, 7, '', 'studyuser', 'N', 'stop', '2021-07-31 06:08:00'),
+	(474, 7, '', 'studyuser', 'Y', 'start', '2021-07-31 06:08:17'),
+	(475, 7, '', 'studyuser', 'N', 'stop', '2021-07-31 06:08:26'),
+	(476, 7, '', 'studyuser', 'Y', 'start', '2021-07-31 06:08:31'),
+	(477, 7, '', 'studyuser', 'N', 'stop', '2021-07-31 06:08:39');
+/*!40000 ALTER TABLE `sosyudylog` ENABLE KEYS */;
+
+-- 테이블 aistudydb.souserchat 구조 내보내기
+CREATE TABLE IF NOT EXISTS `souserchat` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `user_id` int(11) DEFAULT 0,
+  `username` varchar(50) DEFAULT NULL,
+  `yyyymmdd` varchar(8) DEFAULT '',
+  `logaction` varchar(20) DEFAULT NULL,
+  `logstatus` varchar(10) DEFAULT '0',
+  `userlogtime` datetime DEFAULT current_timestamp(),
+  `starttime` datetime DEFAULT NULL,
+  PRIMARY KEY (`id`) USING BTREE
+) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8;
+
+-- 테이블 데이터 aistudydb.souserchat:~0 rows (대략적) 내보내기
+DELETE FROM `souserchat`;
+/*!40000 ALTER TABLE `souserchat` DISABLE KEYS */;
+INSERT INTO `souserchat` (`id`, `user_id`, `username`, `yyyymmdd`, `logaction`, `logstatus`, `userlogtime`, `starttime`) VALUES
+	(3, 1, 'studyuser', '20210731', 'stop', '1', '2021-07-31 06:08:39', '2021-06-26 07:45:56');
+/*!40000 ALTER TABLE `souserchat` ENABLE KEYS */;
+
+-- 테이블 aistudydb.souserdaily 구조 내보내기
+CREATE TABLE IF NOT EXISTS `souserdaily` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `user_id` int(11) DEFAULT 0,
+  `username` varchar(255) DEFAULT NULL,
+  `yyyymmdd` varchar(8) DEFAULT NULL,
+  `total_study` int(11) DEFAULT 0,
+  `total_pause` int(11) DEFAULT 0,
+  `phone_cnt` int(11) DEFAULT 0,
+  `pause_cnt` int(11) DEFAULT 0,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=96 DEFAULT CHARSET=utf8;
+
+-- 테이블 데이터 aistudydb.souserdaily:~24 rows (대략적) 내보내기
+DELETE FROM `souserdaily`;
+/*!40000 ALTER TABLE `souserdaily` DISABLE KEYS */;
+INSERT INTO `souserdaily` (`id`, `user_id`, `username`, `yyyymmdd`, `total_study`, `total_pause`, `phone_cnt`, `pause_cnt`) VALUES
+	(2, 1, 'studyuser', '20210611', 96, 16, 1, 3),
+	(3, 1, 'studyuser', '20210612', 201, 40, 3, 6),
+	(4, 1, 'studyuser', '20210613', 222, 20, 2, 2),
+	(5, 1, 'studyuser', '20210614', 199, 12, 0, 1),
+	(6, 1, 'studyuser', '20210615', 400, 60, 1, 10),
+	(7, 1, 'studyuser', '20210616', 280, 41, 3, 6),
+	(8, 1, 'studyuser', '20210617', 120, 19, 1, 1),
+	(9, 1, 'studyuser', '20210618', 302, 3, 3, 5),
+	(10, 1, 'studyuser', '20210619', 89, 0, 0, 0),
+	(11, 1, 'studyuser', '20210620', 170, 5, 0, 1),
+	(12, 1, 'studyuser', '20210621', 302, 60, 0, 6),
+	(13, 1, 'studyuser', '20210622', 250, 20, 2, 2),
+	(14, 1, 'studyuser', '20210623', 350, 30, 3, 3),
+	(15, 1, 'studyuser', '20210624', 450, 40, 4, 4),
+	(16, 1, 'studyuser', '20210625', 99, 15, 2, 1),
+	(72, 1, 'studyuser', '20210626', 150, 15, 1, 1),
+	(73, 1, 'studyuser', '20210627', 256, 28, 2, 2),
+	(89, 1, 'studyuser', '20210628', 2, 0, 0, 0),
+	(90, 1, 'studyuser', '20210629', 400, 22, 3, 5),
+	(91, 1, 'studyuser', '20210630', 293, 62, 7, 6),
+	(92, 1, 'studyuser', '20210721', 43, 0, 0, 1),
+	(93, 1, 'studyuser', '20210722', 97, 11, 19, 3),
+	(94, 1, 'studyuser', '20210723', 192, 154, 23, 7),
+	(95, 1, 'studyuser', '20210731', 35, 8, 12, 2);
+/*!40000 ALTER TABLE `souserdaily` ENABLE KEYS */;
+
+-- 테이블 aistudydb.souser_profile 구조 내보내기
+CREATE TABLE IF NOT EXISTS `souser_profile` (
+  `id` bigint(20) NOT NULL AUTO_INCREMENT,
+  `role` varchar(20) NOT NULL,
+  `double_pwd` varchar(6) NOT NULL,
+  `verify_type` varchar(10) NOT NULL,
+  `user_type` varchar(20) NOT NULL,
+  `balance_amt` int(11) NOT NULL,
+  `point_amt` int(11) NOT NULL,
+  `profile_img` varchar(100) DEFAULT NULL,
+  `profile_url` varchar(1024) DEFAULT NULL,
+  `qrcode_img` varchar(100) DEFAULT NULL,
+  `qrcode_url` varchar(1024) DEFAULT NULL,
+  `usage_flag` varchar(10) NOT NULL DEFAULT '1',
+  `user_id` int(11) NOT NULL,
+  `logaction` varchar(20) DEFAULT NULL,
+  `logstatus` varchar(10) DEFAULT '0',
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `user_id` (`user_id`),
+  CONSTRAINT `souser_profile_user_id_5a8fe68e_fk_auth_user_id` FOREIGN KEY (`user_id`) REFERENCES `auth_user` (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8;
+
+-- 테이블 데이터 aistudydb.souser_profile:~4 rows (대략적) 내보내기
+DELETE FROM `souser_profile`;
+/*!40000 ALTER TABLE `souser_profile` DISABLE KEYS */;
+INSERT INTO `souser_profile` (`id`, `role`, `double_pwd`, `verify_type`, `user_type`, `balance_amt`, `point_amt`, `profile_img`, `profile_url`, `qrcode_img`, `qrcode_url`, `usage_flag`, `user_id`, `logaction`, `logstatus`) VALUES
+	(1, 'user', '123456', '1', 'STUDENT', 0, 0, 'human.png', '', 'qr_user.png', '', '1', 1, 'stop', '0'),
+	(2, 'user', '123456', '1', 'STUDENT', 0, 0, 'human.png', '', 'qr_user.png', '', '1', 2, '', '0'),
+	(3, 'user', '123456', '1', 'STUDENT', 0, 0, 'human.png', '', 'qr_user.png', '', '1', 3, '', '0'),
+	(4, 'user', '123456', '1', 'STUDENT', 0, 0, 'human.png', '', 'qr_user.png', '', '1', 4, '', '0'),
+	(5, 'user', '123456', '1', 'STUDENT', 0, 0, 'human.png', '', 'qr_user.png', '', '1', 5, '', '0');
+/*!40000 ALTER TABLE `souser_profile` ENABLE KEYS */;
+
+/*!40101 SET SQL_MODE=IFNULL(@OLD_SQL_MODE, '') */;
+/*!40014 SET FOREIGN_KEY_CHECKS=IFNULL(@OLD_FOREIGN_KEY_CHECKS, 1) */;
+/*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
+/*!40111 SET SQL_NOTES=IFNULL(@OLD_SQL_NOTES, 1) */;
